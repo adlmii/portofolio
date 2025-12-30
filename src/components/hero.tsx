@@ -1,94 +1,225 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown } from "lucide-react";
+import { useState, useRef } from "react";
+import { motion } from "framer-motion";
+import { Play, Pause, ArrowRight, Github, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useRef } from "react";
 import { Squares } from "@/components/ui/squares";
+import Image from "next/image";
+
+
+const formatTime = (time: number) => {
+  if (isNaN(time)) return "0:00";
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time % 60);
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+};
 
 export function Hero() {
-  const ref = useRef(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [volume, setVolume] = useState(0.5);
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]); 
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime);
+    }
+  };
+
+  const handleLoadedMetadata = () => {
+    if (audioRef.current) {
+      setDuration(audioRef.current.duration);
+      audioRef.current.volume = volume;
+    }
+  };
+
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const time = parseFloat(e.target.value);
+    if (audioRef.current) {
+      audioRef.current.currentTime = time;
+      setCurrentTime(time);
+    }
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume;
+      setIsMuted(newVolume === 0);
+    }
+  };
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      const newMutedState = !isMuted;
+      setIsMuted(newMutedState);
+      audioRef.current.muted = newMutedState;
+    }
+  };
+
+  const handleEnded = () => {
+    setIsPlaying(false);
+    setCurrentTime(0);
+    if (audioRef.current) audioRef.current.currentTime = 0;
+  };
 
   return (
-    <section ref={ref} className="relative h-[90vh] flex flex-col items-center justify-center overflow-hidden bg-background">
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-background">
       
-      {/* Background Layers - Updated with Squares */}
       <div className="absolute inset-0 w-full h-full z-0">
-         {/* Tambahkan Squares di sini */}
+         {/* UPDATED SQUARES */}
          <Squares 
             direction="diagonal"
             speed={0.5}
             squareSize={40}
-            borderColor="#333" 
+            borderColor="#666" 
             hoverFillColor="#222"
-            className="opacity-20 w-full h-full absolute inset-0"
+            className="opacity-30 w-full h-full absolute inset-0"
         />
-        
-        {/* Radial Gradient Overlay untuk membuat tengahnya lebih terang/fokus */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.15),transparent)] pointer-events-none" />
-        
-        {/* Fade to bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-background to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-b from-transparent via-background/50 to-background pointer-events-none" />
       </div>
 
-      <motion.div 
-        style={{ y, opacity }}
-        className="container px-4 md:px-6 text-center z-10 relative pointer-events-none" // pointer-events-none agar mouse bisa tembus ke Squares, tapi button harus di-enable ulang
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="space-y-4"
-        >
-          <div className="inline-block rounded-full bg-secondary px-4 py-1.5 text-sm font-medium text-primary mb-4 border border-border shadow-xs pointer-events-auto">
-            Frontend Engineer & UI Designer
-          </div>
+      <div className="container relative z-10 px-4 md:px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground max-w-4xl mx-auto leading-[1.1]">
-            Crafting pixel-perfect, <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-blue-600">
-              interactive interfaces.
-            </span>
-          </h1>
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex flex-col gap-6 text-center lg:text-left"
+          >
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.15]">
+              I craft{" "}
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-blue-400">
+                interactive
+              </span>{" "}
+              web experiences.
+            </h1>
 
-          <p className="mx-auto max-w-175 text-muted-foreground md:text-xl leading-relaxed pt-4">
-            I'm a Frontend Specialist passionate about Performance, Accessibility, 
-            and Clean Architecture. Building the web, one component at a time.
-          </p>
-        </motion.div>
+            <p className="text-lg text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0">
+              Building fast, responsive, and memorable web experiences. 
+              But the best experiences need the right atmosphere.{" "}
+              <strong className="text-foreground font-semibold">
+                Go ahead, hit Play on the card to the right
+              </strong>
+              , set the vibe, and enjoy exploring my work below.
+            </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
-          className="mt-8 flex flex-col sm:flex-row justify-center gap-4 pointer-events-auto" // Enable pointer events for buttons
-        >
-          <Button size="lg" className="rounded-full px-8 text-lg h-12 shadow-md hover:shadow-lg transition-all" asChild>
-            <a href="#projects">Lihat Project</a>
-          </Button>
-          <Button variant="outline" size="lg" className="rounded-full px-8 text-lg h-12 bg-background border-border hover:bg-secondary/80 hover:text-foreground" asChild>
-             <a href="https://github.com/adlmii" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
-          </Button>
-        </motion.div>
-      </motion.div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+              <Button size="lg" className="rounded-full px-8 h-12 text-base font-medium shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all" asChild>
+                <a href="#projects">
+                  View Projects <ArrowRight className="ml-2 w-4 h-4" />
+                </a>
+              </Button>
+              <Button variant="outline" size="lg" className="rounded-full px-8 h-12 text-base bg-background/50 backdrop-blur-sm border-border hover:bg-secondary/50" asChild>
+                 <a href="https://github.com/adlmii" target="_blank" rel="noopener noreferrer">
+                   <Github className="mr-2 w-4 h-4" />
+                   GitHub Profile
+                 </a>
+              </Button>
+            </div>
+          </motion.div>
 
-      <motion.div
-        style={{ opacity: useTransform(scrollYProgress, [0, 0.2], [1, 0]) }}
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-10 z-10 pointer-events-none"
-      >
-        <ArrowDown className="text-muted-foreground h-6 w-6" />
-      </motion.div>
+          <motion.div 
+             initial={{ opacity: 0, scale: 0.9, y: 30 }}
+             animate={{ opacity: 1, scale: 1, y: 0 }}
+             transition={{ delay: 0.2, duration: 0.8 }}
+             className="flex justify-center lg:justify-end"
+          >
+            <div className="relative w-full max-w-sm bg-card/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl shadow-black/50 overflow-hidden group">
+              
+              {/* Glow Effect */}
+              <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+
+              <div className="relative z-10 flex flex-col gap-5">
+                
+                <div className="aspect-square w-full relative rounded-2xl overflow-hidden bg-muted shadow-inner ring-1 ring-white/5">
+                    <Image 
+                        src="/images/bread-cover.png" 
+                        alt="Bread Cover" 
+                        fill 
+                        className={`object-cover transition-transform duration-700 ${isPlaying ? 'scale-110' : 'scale-100'}`}
+                    />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <h3 className="font-semibold text-xl text-card-foreground tracking-tight">Bread</h3>
+                    <p className="text-sm text-muted-foreground font-medium">Lukrembo</p>
+                  </div>
+
+                  <button 
+                    onClick={togglePlay}
+                    className="flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:scale-105 shadow-lg shadow-primary/25"
+                  >
+                     {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current ml-1" />}
+                  </button>
+                </div>
+
+                <div className="space-y-2">
+                    <input
+                        type="range"
+                        min={0}
+                        max={duration || 0}
+                        value={currentTime}
+                        onChange={handleSeek}
+                        className="w-full h-1 bg-secondary/80 rounded-lg appearance-none cursor-pointer accent-primary hover:accent-primary/90"
+                    />
+                    <div className="flex justify-between text-[10px] text-muted-foreground font-medium font-mono">
+                        <span>{formatTime(currentTime)}</span>
+                        <span>{formatTime(duration)}</span>
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                    <div className="flex items-center gap-2 group/vol">
+                        <button onClick={toggleMute} className="text-muted-foreground hover:text-foreground transition-colors">
+                            {isMuted || volume === 0 ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                        </button>
+                        <input 
+                            type="range"
+                            min={0}
+                            max={1}
+                            step={0.01}
+                            value={isMuted ? 0 : volume}
+                            onChange={handleVolumeChange}
+                            className="w-16 h-1 bg-secondary/80 rounded-lg appearance-none cursor-pointer accent-foreground hover:accent-foreground/80 opacity-50 group-hover/vol:opacity-100 transition-opacity"
+                        />
+                    </div>
+                    
+                    <span className="text-[10px] text-muted-foreground">No Copyright Music</span>
+                </div>
+
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      <audio 
+        ref={audioRef}
+        src="/music/bread.mp3" 
+        onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={handleLoadedMetadata}
+        onEnded={handleEnded}
+        preload="metadata"
+      />
     </section>
   );
 }
