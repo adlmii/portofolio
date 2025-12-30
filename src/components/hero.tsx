@@ -39,7 +39,8 @@ export function Hero() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="space-y-4"
         >
-          <div className="inline-block rounded-full bg-muted/50 px-3 py-1 text-sm font-medium text-primary mb-4 backdrop-blur-sm border border-primary/10">
+          {/* UPDATED: Solid background (bg-secondary) instead of bg-muted/50 */}
+          <div className="inline-block rounded-full bg-secondary px-4 py-1.5 text-sm font-medium text-primary mb-4 border border-border shadow-xs">
             Frontend Engineer & UI Designer
           </div>
           
@@ -62,10 +63,11 @@ export function Hero() {
           transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
           className="mt-8 flex flex-col sm:flex-row justify-center gap-4"
         >
-          <Button size="lg" className="rounded-full px-8 text-lg h-12" asChild>
+          <Button size="lg" className="rounded-full px-8 text-lg h-12 shadow-md hover:shadow-lg transition-all" asChild>
             <a href="#projects">Lihat Project</a>
           </Button>
-          <Button variant="outline" size="lg" className="rounded-full px-8 text-lg h-12 bg-background/50 backdrop-blur-sm hover:bg-background/80" asChild>
+          {/* UPDATED: Solid bg-background instead of bg-background/50 */}
+          <Button variant="outline" size="lg" className="rounded-full px-8 text-lg h-12 bg-background border-border hover:bg-secondary/80 hover:text-foreground" asChild>
              <a href="https://github.com/adlmii" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
           </Button>
         </motion.div>

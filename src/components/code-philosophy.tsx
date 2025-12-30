@@ -25,8 +25,8 @@ export function CodePhilosophy() {
   return (
     <section id="about" className="relative py-16 overflow-hidden">
       
-      {/* Blending Layers */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-border/40 to-transparent" />
+      {/* Blending Layers - Optimized for contrast */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
       <div className="absolute inset-0 bg-linear-to-b from-primary/5 via-background to-background -z-20" />
       <div className="absolute inset-0 
         bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] 
@@ -41,7 +41,6 @@ export function CodePhilosophy() {
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: false, amount: 0.5 }}
-            // SMOOTH TWEAK: EaseOut
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="space-y-8"
           >
@@ -62,7 +61,8 @@ export function CodePhilosophy() {
                 <motion.div 
                   key={index}
                   whileHover={{ x: 10, backgroundColor: "rgba(var(--primary), 0.05)" }}
-                  className="flex gap-4 items-start p-4 rounded-xl border border-transparent hover:border-border/50 transition-colors cursor-default"
+                  // UPDATED: Added solid border-border instead of transparent
+                  className="flex gap-4 items-start p-4 rounded-xl border border-border bg-card/50 hover:border-primary/50 transition-colors cursor-default"
                 >
                   <div className={`mt-1 p-2 rounded-lg ${item.color}`}>
                     <Check className="h-4 w-4" />

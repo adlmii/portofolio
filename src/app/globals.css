@@ -71,35 +71,37 @@
   Feel: Technical, Deep, Modern.
 */
 :root {
-  /* Light Mode: Clean & Crisp */
-  --background: 0 0% 100%;       /* Pure White */
-  --foreground: 222 47% 11%;     /* Deep Navy Text */
+  /* Light Mode: High Contrast & Crisp */
+  --background: 0 0% 100%;       /* Tetap Pure White */
+  --foreground: 222 47% 5%;      /* Deep Navy hampir hitam (lebih gelap dari 11%) */
   
   --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
+  --card-foreground: 222 47% 5%;
  
   --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
+  --popover-foreground: 222 47% 5%;
  
-  /* Primary sekarang INDIGO, bukan hitam */
-  --primary: 221 83% 53%;        /* Vivid Indigo */
+  /* Primary sedikit lebih deep biar pop di background putih */
+  --primary: 221 83% 48%;        
   --primary-foreground: 210 40% 98%;
  
-  --secondary: 210 40% 96.1%;    /* Very Light Blue-Gray */
+  /* Secondary dibuat agak lebih gelap dikit biar kelihatan bedanya sama bg */
+  --secondary: 210 40% 92%;    
   --secondary-foreground: 222 47% 11%;
  
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215 16% 47%;
+  --muted: 210 40% 92%;
+  --muted-foreground: 215 25% 40%; /* Lebih gelap (47% -> 40%) biar teks abu lebih kebaca */
  
-  --accent: 210 40% 96.1%;
+  --accent: 210 40% 92%;
   --accent-foreground: 222 47% 11%;
  
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 210 40% 98%;
 
-  --border: 214 32% 91%;         /* Subtle Blue-Gray Border */
-  --input: 214 32% 91%;
-  --ring: 221 83% 53%;
+  /* Border digelapin signifikan (91% -> 82%) biar outline elemen jelas */
+  --border: 214 20% 82%;         
+  --input: 214 20% 82%;
+  --ring: 221 83% 48%;
  
   --radius: 0.75rem;
   --font-sans: "Inter", sans-serif;

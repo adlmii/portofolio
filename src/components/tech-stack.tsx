@@ -99,17 +99,19 @@ export function TechStack() {
                 scale: 1.02,
                 transition: { type: "spring", stiffness: 300, damping: 20 } 
               }} 
+              // UPDATED: Removed opacity modifiers (/50) from border and bg for solid contrast
               className={`
-                group relative p-6 rounded-2xl border border-border/50 bg-card/50 
-                hover:bg-card/80 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5
-                transition-colors duration-300 ease-in-out backdrop-blur-sm flex flex-col justify-between gap-4 overflow-hidden
+                group relative p-6 rounded-2xl border border-border bg-card shadow-sm
+                hover:border-primary hover:shadow-lg hover:shadow-primary/5
+                transition-all duration-300 ease-in-out flex flex-col justify-between gap-4 overflow-hidden
                 ${item.className}
               `}
             >
-              <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
               <div className="flex items-center justify-between relative z-10">
-                <div className="p-2.5 rounded-xl bg-background/50 border border-border/50 group-hover:border-primary/20 group-hover:bg-primary/10 transition-colors duration-300">
+                {/* UPDATED: Solid background for icon container */}
+                <div className="p-2.5 rounded-xl bg-background border border-border group-hover:border-primary/20 group-hover:bg-primary/10 transition-colors duration-300">
                   {item.icon}
                 </div>
               </div>
