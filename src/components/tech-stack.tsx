@@ -7,24 +7,24 @@ const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { 
-      staggerChildren: 0.15,
+    transition: {
+      staggerChildren: 0.1,
     },
   },
 };
 
 const itemVariants: Variants = {
-  hidden: { y: 30, opacity: 0 },
+  hidden: { x: 20, opacity: 0 },
   visible: {
-    y: 0,
+    x: 0,
     opacity: 1,
-    transition: { duration: 0.6, ease: "easeOut" }
+    transition: { duration: 0.5, ease: "easeOut" },
   },
 };
 
 export function TechStack() {
   return (
-    <section id="tech" className="relative py-16 overflow-hidden">
+    <section id="tech" className="relative py-24 overflow-hidden">
       
       {/* Background Blending */}
       <div className="absolute inset-0 h-full w-full bg-background -z-10">
@@ -36,56 +36,75 @@ export function TechStack() {
         />
       </div>
 
-      <div className="container relative z-10 space-y-8">
-        <div className="space-y-2 max-w-2xl">
-          <h2 className="text-3xl font-bold tracking-tight">Tech Stack</h2>
-          <p className="text-muted-foreground text-lg">
-            The tools I use to build high-performance web applications.
-          </p>
-        </div>
-
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4"
-        >
-          {techStack.map((item, index) => (
-            <motion.div
-              key={index}
-              variants={itemVariants}
-              whileHover={{ 
-                y: -5, 
-                scale: 1.02,
-                transition: { type: "spring", stiffness: 300, damping: 20 } 
-              }} 
-              className={`
-                group relative p-6 rounded-2xl border border-border bg-card shadow-sm
-                hover:border-primary hover:shadow-lg hover:shadow-primary/5
-                transition-all duration-300 ease-in-out flex flex-col justify-between gap-4 overflow-hidden
-                ${item.className}
-              `}
+      <div className="container relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          {/* BAGIAN KIRI: Teks Sticky (Tetap) */}
+          <div className="lg:col-span-4 lg:sticky lg:top-32 space-y-6">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
             >
-              <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-              <div className="flex items-center justify-between relative z-10">
-                <div className="p-2.5 rounded-xl bg-background border border-border group-hover:border-primary/20 group-hover:bg-primary/10 transition-colors duration-300">
-                  {item.icon}
-                </div>
-              </div>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 bg-linear-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
+                Tech Stack
+              </h2>
+              <div className="h-1 w-20 bg-primary rounded-full mb-6" />
               
-              <div className="relative z-10">
-                <h3 className="font-semibold text-lg tracking-tight group-hover:text-primary transition-colors duration-300">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {item.description}
-                </p>
-              </div>
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                The battle-tested tools I use to build high-performance, scalable web applications.
+                <br /><br />
+                I focus on the <span className="text-foreground font-semibold">React Ecosystem</span> but always keep an eye on modern web standards.
+              </p>
             </motion.div>
-          ))}
-        </motion.div>
+          </div>
+
+          {/* BAGIAN KANAN: Grid Kartu (DIUPDATE) */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.1 }}
+            className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 auto-rows-fr"
+          >
+            {techStack.map((item, index) => (
+              <motion.div
+                key={index}
+                variants={itemVariants}
+                whileHover={{ 
+                  scale: 1.02,
+                  transition: { type: "spring", stiffness: 300 } 
+                }} 
+                className={`
+                  group relative p-5 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm
+                  hover:bg-card hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5
+                  transition-all duration-300 flex flex-col gap-4 h-full
+                  ${item.className}
+                `}
+              >
+                <div className="flex items-center gap-4">
+                    <div className="p-2.5 rounded-lg bg-background border border-border group-hover:border-primary/20 group-hover:bg-primary/10 transition-colors duration-300 shrink-0">
+                    {item.icon}
+                    </div>
+                    <h3 className="font-semibold text-base tracking-tight group-hover:text-primary transition-colors">
+                        {item.title}
+                    </h3>
+                </div>
+
+                <div className="relative z-10 flex-1">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+
+                {/* Decorative Gradient Blob on Hover */}
+                <div className="absolute inset-0 bg-linear-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 rounded-xl transition-opacity pointer-events-none" />
+              </motion.div>
+            ))}
+          </motion.div>
+
+        </div>
       </div>
     </section>
   );

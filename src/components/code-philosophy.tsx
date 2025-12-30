@@ -6,16 +6,20 @@ import { principles } from "@/lib/data";
 
 export function CodePhilosophy() {
   return (
-    <section id="about" className="relative py-16 overflow-hidden">
+    <section id="about" className="relative py-24 overflow-hidden">
       
-      {/* Blending Layers */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
-      <div className="absolute inset-0 bg-linear-to-b from-primary/5 via-background to-background -z-20" />
-      <div className="absolute inset-0 
-        bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] 
-        bg-size[24px_24px] 
-        mask-[linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)] -z-10" 
-      />
+      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-border to-transparent z-10" />
+      
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute h-full w-full 
+          bg-[linear-gradient(to_right,#333_1px,transparent_1px),linear-gradient(to_bottom,#333_1px,transparent_1px)] 
+          bg-size[40px_40px] 
+          opacity-20
+          mask-[radial-gradient(ellipse_80%_50%_at_50%_50%,#000_70%,transparent_100%)]" 
+        />
+      </div>
+
+      <div className="absolute inset-0 bg-linear-to-b from-transparent via-background/80 to-background z-0 pointer-events-none" />
 
       <div className="container relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -59,7 +63,6 @@ export function CodePhilosophy() {
           </motion.div>
 
           <div className="relative perspective-1000">
-            {/* Glow */}
             <div className="absolute inset-0 bg-linear-to-r from-blue-500/30 to-purple-600/30 blur-[60px] opacity-20 rounded-full" />
             
             <motion.div
@@ -67,7 +70,7 @@ export function CodePhilosophy() {
               whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
               viewport={{ once: false, amount: 0.5 }}
               transition={{ duration: 1, ease: "easeOut" }}
-              className="relative rounded-xl border border-border bg-[#09090b] shadow-2xl overflow-hidden animate-float"
+              className="relative rounded-xl border border-border bg-[#09090b] shadow-2xl overflow-hidden"
             >
 
               <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-white/5">
