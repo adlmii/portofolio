@@ -1,7 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ExternalLink, Github, Code2, Layers, Database, ArrowUpRight } from "lucide-react";
+// Icon yang spesifik untuk data (Layers, Code2, Database) sudah tidak perlu di-import di sini
+import { ExternalLink, Github, ArrowUpRight } from "lucide-react"; 
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,51 +14,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Code2 } from "lucide-react"; // Kita masih butuh Code2 untuk icon statis di "Engineering Challenge"
 
-const projects = [
-  {
-    id: 1,
-    title: "WatchTier",
-    category: "Interactive UI",
-    description: "A drag-and-drop tier list maker for movie enthusiasts. Users can rank movies, save their lists locally, and share them as images.",
-    tech: ["React", "DnD Kit", "Zustand", "Tailwind"],
-    icon: <Layers className="h-6 w-6 text-blue-500" />,
-    highlight: "Engineered a complex drag-and-drop system with optimistic UI updates. Managed global state for tier ordering using Zustand to prevent prop-drilling hell.",
-    links: { demo: "#", repo: "#" },
-    gradient: "from-blue-500/20 to-cyan-500/20",
-    border: "group-hover:border-blue-500", // Solid border on hover
-  },
-  {
-    id: 2,
-    title: "Mosque App",
-    category: "Modern Architecture",
-    description: "Comprehensive management system for Mosques, handling prayer schedules, finance tracking, and event management.",
-    tech: ["Next.js 14", "Drizzle ORM", "Shadcn UI", "Server Actions"],
-    icon: <Code2 className="h-6 w-6 text-emerald-500" />,
-    highlight: "Leveraged Next.js Server Components for SEO-critical pages while using Client Components for real-time prayer countdowns, achieving a perfect Lighthouse score.",
-    links: { demo: "#", repo: "#" },
-    gradient: "from-emerald-500/20 to-green-500/20",
-    border: "group-hover:border-emerald-500",
-  },
-  {
-    id: 3,
-    title: "Sipit 2.0",
-    category: "Data Handling",
-    description: "Library dashboard system for handling thousands of book records, member data, and circulation logs efficiently.",
-    tech: ["React", "Vite", "TanStack Table", "React Query"],
-    icon: <Database className="h-6 w-6 text-orange-500" />,
-    highlight: "Implemented server-side pagination and filtering strategies using TanStack Table to handle large datasets without compromising client-side performance.",
-    links: { demo: "#", repo: "#" },
-    gradient: "from-orange-500/20 to-red-500/20",
-    border: "group-hover:border-orange-500",
-  },
-];
+// IMPORT DATA DARI FILE BARU
+import { projects } from "@/lib/data"; 
 
 export function FeaturedProjects() {
   return (
     <section id="projects" className="relative pt-24 pb-16 overflow-hidden">
       
-      {/* Background Blending - Opacity removed for solid feel in light mode */}
+      {/* Background Blending */}
       <div className="absolute inset-0 -z-10 overflow-visible pointer-events-none">
          <div className="absolute top-0 left-0 w-125 h-125 rounded-full bg-primary/5 blur-[120px] -translate-y-1/2 -translate-x-1/2" />
          <div className="absolute bottom-0 right-0 w-125 h-125 rounded-full bg-blue-500/5 blur-[120px] translate-y-1/2 translate-x-1/2" />
@@ -80,32 +47,38 @@ export function FeaturedProjects() {
               transition={{ duration: 0.8, ease: "easeOut", delay: index * 0.1 }}
               className="group"
             >
-              <div className={`flex flex-col md:flex-row gap-8 lg:gap-12 items-start ${
+              <div className={`flex flex-col md:flex-row gap-8 lg:gap-12 items-center ${
                 index % 2 === 1 ? "md:flex-row-reverse" : ""
               }`}>
                 
-                {/* Visual Side - UPDATED: Solid border & bg-card */}
+                {/* Visual Side (Polished Mockup) */}
                 <div className={`
-                  w-full md:w-3/5 aspect-video rounded-2xl border border-border bg-card 
-                  overflow-hidden relative shadow-sm transition-all duration-500
+                  relative w-full md:w-3/5 aspect-video 
+                  rounded-2xl border border-border/50 bg-secondary/30 
+                  overflow-hidden shadow-lg transition-all duration-500
                   ${project.border} group-hover:shadow-2xl
                 `}>
-                  <div className={`
-                    absolute inset-0 bg-linear-to-br ${project.gradient} opacity-30 
-                    group-hover:opacity-50 group-hover:scale-105 transition-all duration-700 ease-out
-                  `} />
                   
-                  <div className="absolute inset-0 flex items-center justify-center">
-                     <span className="text-muted-foreground/40 font-mono text-xl font-bold tracking-widest uppercase group-hover:scale-110 transition-transform duration-500">
-                       {project.title} Preview
-                     </span>
+                  {/* Background Gradient Layer */}
+                  <div className={`absolute inset-0 bg-linear-to-br ${project.gradient} opacity-20 group-hover:opacity-30 transition-opacity duration-500`} />
+
+                  {/* Image Wrapper */}
+                  <div className="absolute inset-4 md:inset-6 rounded-lg overflow-hidden shadow-xl bg-background group-hover:-translate-y-2 group-hover:scale-[1.02] transition-all duration-500 ease-out">
+                    <Image 
+                        src={project.image}
+                        alt={`${project.title} screenshot`}
+                        fill
+                        className="object-cover object-top"
+                        sizes="(max-width: 768px) 100vw, 60vw"
+                        quality={85}
+                    />
                   </div>
                 </div>
 
+                {/* Content Side */}
                 <div className="w-full md:w-2/5 space-y-6 flex flex-col justify-center">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm font-medium text-primary">
-                      {/* UPDATED: Solid background for category icon */}
                       <span className="p-1.5 rounded-md bg-secondary text-primary">
                         {project.icon}
                       </span>
@@ -122,7 +95,6 @@ export function FeaturedProjects() {
                     {project.description}
                   </p>
 
-                  {/* UPDATED: Card bg changed from muted/30 to secondary (solid) for better readability */}
                   <Card className="bg-secondary border-border transition-colors duration-300 group-hover:border-primary/30">
                     <CardHeader className="p-4 pb-2">
                       <CardTitle className="text-sm font-semibold flex items-center gap-2 text-primary">
@@ -139,8 +111,6 @@ export function FeaturedProjects() {
 
                   <div className="flex flex-wrap gap-2">
                     {project.tech.map((t) => (
-                      // UPDATED: Badge uses default variant which is usually solid primary, 
-                      // or ensure secondary is solid in globals.css
                       <Badge key={t} variant="secondary" className="rounded-md px-3 py-1">
                         {t}
                       </Badge>

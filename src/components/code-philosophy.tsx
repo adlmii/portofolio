@@ -2,30 +2,13 @@
 
 import { motion } from "framer-motion";
 import { Check, Terminal, Copy } from "lucide-react";
-
-const principles = [
-  {
-    title: "Clean Architecture",
-    description: "Business logic lives apart from UI components.",
-    color: "bg-blue-500/10 text-blue-500",
-  },
-  {
-    title: "Performance First",
-    description: "Memoization patterns and efficient re-renders.",
-    color: "bg-emerald-500/10 text-emerald-500",
-  },
-  {
-    title: "Type Safety",
-    description: "Strict TypeScript implementation to catch errors.",
-    color: "bg-purple-500/10 text-purple-500",
-  },
-];
+import { principles } from "@/lib/data";
 
 export function CodePhilosophy() {
   return (
     <section id="about" className="relative py-16 overflow-hidden">
       
-      {/* Blending Layers - Optimized for contrast */}
+      {/* Blending Layers */}
       <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
       <div className="absolute inset-0 bg-linear-to-b from-primary/5 via-background to-background -z-20" />
       <div className="absolute inset-0 
@@ -61,7 +44,6 @@ export function CodePhilosophy() {
                 <motion.div 
                   key={index}
                   whileHover={{ x: 10, backgroundColor: "rgba(var(--primary), 0.05)" }}
-                  // UPDATED: Added solid border-border instead of transparent
                   className="flex gap-4 items-start p-4 rounded-xl border border-border bg-card/50 hover:border-primary/50 transition-colors cursor-default"
                 >
                   <div className={`mt-1 p-2 rounded-lg ${item.color}`}>

@@ -1,46 +1,7 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { Code2, Layout, Palette, Settings, Smartphone, Zap } from "lucide-react";
-
-const techItems = [
-  {
-    title: "Next.js 14",
-    description: "App Router & Server Actions",
-    icon: <Zap className="h-6 w-6 text-yellow-500" />,
-    className: "md:col-span-2", 
-  },
-  {
-    title: "TypeScript",
-    description: "Strict Type Safety",
-    icon: <Code2 className="h-6 w-6 text-blue-500" />,
-    className: "md:col-span-1",
-  },
-  {
-    title: "Tailwind CSS",
-    description: "Utility-first Styling",
-    icon: <Palette className="h-6 w-6 text-cyan-400" />,
-    className: "md:col-span-1",
-  },
-  {
-    title: "React Ecosystem",
-    description: "Zustand, TanStack Query",
-    icon: <Layout className="h-6 w-6 text-blue-400" />,
-    className: "md:col-span-2", 
-  },
-  {
-    title: "Framer Motion",
-    description: "Complex Animations",
-    icon: <Settings className="h-6 w-6 text-purple-500" />,
-    className: "md:col-span-1",
-  },
-  {
-    title: "Shadcn UI",
-    description: "Accessible Components",
-    icon: <Smartphone className="h-6 w-6 text-foreground" />,
-    className: "md:col-span-2", 
-  },
-];
+import { techStack } from "@/lib/data";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -70,7 +31,7 @@ export function TechStack() {
         <div className="absolute h-full w-full 
           bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] 
           dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] 
-          bg-size-[16px_16px] 
+          bg-size[16px_16px] 
           mask-[linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]" 
         />
       </div>
@@ -90,7 +51,7 @@ export function TechStack() {
           viewport={{ once: false, amount: 0.2 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-4"
         >
-          {techItems.map((item, index) => (
+          {techStack.map((item, index) => (
             <motion.div
               key={index}
               variants={itemVariants}
@@ -99,7 +60,6 @@ export function TechStack() {
                 scale: 1.02,
                 transition: { type: "spring", stiffness: 300, damping: 20 } 
               }} 
-              // UPDATED: Removed opacity modifiers (/50) from border and bg for solid contrast
               className={`
                 group relative p-6 rounded-2xl border border-border bg-card shadow-sm
                 hover:border-primary hover:shadow-lg hover:shadow-primary/5
@@ -110,7 +70,6 @@ export function TechStack() {
               <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
               <div className="flex items-center justify-between relative z-10">
-                {/* UPDATED: Solid background for icon container */}
                 <div className="p-2.5 rounded-xl bg-background border border-border group-hover:border-primary/20 group-hover:bg-primary/10 transition-colors duration-300">
                   {item.icon}
                 </div>
