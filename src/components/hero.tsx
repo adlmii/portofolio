@@ -36,7 +36,7 @@ export function Hero() {
   };
 
   return (
-    <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center overflow-hidden bg-background py-16 sm:py-20 lg:py-24">
+    <section id="hero" className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center overflow-hidden bg-background py-16 sm:py-20 lg:py-24">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <Squares

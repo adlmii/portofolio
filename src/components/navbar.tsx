@@ -1,108 +1,176 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Menu, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { useScrollSpy } from "@/hooks/useScrollSpy";
 
 const navLinks = [
-  { name: "Work", href: "#projects" },
-  { name: "Tech", href: "#tech" },
+  { name: "Home", href: "#hero" },
   { name: "About", href: "#about" },
-  { name: "Contact", href: "mailto:email@example.com" },
+  { name: "Tech", href: "#tech" },
+  { name: "Work", href: "#projects" },
 ];
 
 export function Navbar() {
   const { theme, setTheme } = useTheme();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const activeSection = useScrollSpy(
+    navLinks.map((l) => l.href)
+  );
+
+  useEffect(() => setMounted(true), []);
+
+  const isActive = (href: string) =>
+    activeSection === href.replace("#", "");
+
+  const handleLinkClick = (href: string) => {
+    setMobileMenuOpen(false);
+    const el = document.querySelector(href);
+    el?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
-    <motion.nav
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md"
-    >
-      <div className="container flex h-16 items-center justify-between px-4 md:px-8">
-        {/* Logo / Inisial */}
-        <Link href="/" className="mr-6 flex items-center space-x-2 group">
-          <motion.div
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            whileTap={{ scale: 0.9 }}
-            className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold font-mono shadow-lg shadow-primary/20"
-          >
-            NA
-          </motion.div>
-          <span className="text-lg font-bold font-mono tracking-tighter group-hover:text-primary transition-colors">
-            Portfolio
-          </span>
-        </Link>
+    <>
+      <div className="fixed top-4 right-4 z-50 md:hidden">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="rounded-full h-10 w-10 bg-background/80 backdrop-blur-xl border shadow-lg"
+        >
+          <AnimatePresence mode="wait">
+            {mobileMenuOpen ? (
+              <motion.div
+                key="close"
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+              >
+                <X className="h-5 w-5" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="menu"
+                initial={{ rotate: 90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: -90, opacity: 0 }}
+              >
+                <Menu className="h-5 w-5" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </Button>
+      </div>
 
-        {/* Desktop Links */}
-        <div className="hidden md:flex gap-2 items-center">
-          {navLinks.map((link, index) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="relative px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              <span className="relative z-10">{link.name}</span>
-              <AnimatePresence>
-                {hoveredIndex === index && (
-                  <motion.span
-                    className="absolute inset-0 rounded-full bg-primary/10"
-                    layoutId="hoverBackground"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.3 }}
+      <motion.nav
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="hidden md:block fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-background/80 backdrop-blur-xl border rounded-full px-2 py-2 shadow-lg"
+      >
+        <div className="flex gap-1 items-center">
+          {navLinks.map((link, index) => {
+            const active = isActive(link.href);
+
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLinkClick(link.href);
+                }}
+                className="relative px-5 py-2 text-sm font-medium rounded-full"
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                <span
+                  className={`relative z-10 transition-colors ${
+                    active
+                      ? "text-foreground font-semibold"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {link.name}
+                </span>
+
+                {active && (
+                  <motion.div
+                    layoutId="activeSection"
+                    className="absolute inset-0 rounded-full bg-foreground"
+                    transition={{
+                      type: "spring",
+                      bounce: 0.2,
+                      duration: 0.6,
+                    }}
                   />
                 )}
-              </AnimatePresence>
-            </Link>
-          ))}
-        </div>
 
+                <AnimatePresence>
+                  {hoveredIndex === index && !active && (
+                    <motion.span
+                      className="absolute inset-0 rounded-full bg-muted/50"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{
+                        type: "spring",
+                        bounce: 0.2,
+                        duration: 0.3,
+                      }}
+                    />
+                  )}
+                </AnimatePresence>
+
+                {/* ACTIVE TEXT OVERLAY */}
+                {active && (
+                  <span className="absolute inset-0 flex items-center justify-center z-20 text-background font-semibold text-sm">
+                    {link.name}
+                  </span>
+                )}
+              </Link>
+            );
+          })}
+        </div>
+      </motion.nav>
+
+      <div className="hidden md:block fixed top-4 right-4 z-50">
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="rounded-full relative overflow-hidden hover:bg-primary/10 hover:text-primary"
+          className="rounded-full h-10 w-10 bg-background/80 backdrop-blur-xl border shadow-lg relative"
         >
-          {mounted ? (
+          {mounted && (
             <>
               <motion.div
-                initial={false}
-                animate={{ rotate: theme === "dark" ? 0 : 180, scale: theme === "dark" ? 1 : 0 }}
-                transition={{ duration: 0.3 }}
-                className="absolute"
+                animate={{
+                  rotate: theme === "dark" ? 0 : 180,
+                  scale: theme === "dark" ? 1 : 0,
+                }}
               >
-                <Moon className="h-[1.2rem] w-[1.2rem]" />
+                <Moon className="h-4 w-4" />
               </motion.div>
               <motion.div
-                initial={false}
-                animate={{ rotate: theme === "dark" ? -180 : 0, scale: theme === "dark" ? 0 : 1 }}
-                transition={{ duration: 0.3 }}
+                animate={{
+                  rotate: theme === "dark" ? -180 : 0,
+                  scale: theme === "dark" ? 0 : 1,
+                }}
                 className="absolute"
               >
-                <Sun className="h-[1.2rem] w-[1.2rem]" />
+                <Sun className="h-4 w-4" />
               </motion.div>
             </>
-          ) : (
-            <span className="h-[1.2rem] w-[1.2rem]" />
           )}
-          <span className="sr-only">Toggle theme</span>
         </Button>
       </div>
-    </motion.nav>
+    </>
   );
 }

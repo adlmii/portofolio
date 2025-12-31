@@ -13,8 +13,6 @@ export function About() {
     >
       <div className="container px-4 md:px-6 py-20 sm:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start lg:items-center">
-
-          {/* IMAGE — MOBILE FIRST */}
           <motion.div
             initial={{ opacity: 0, y: 24, scale: 0.96 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -25,7 +23,6 @@ export function About() {
             <TiltedCard />
           </motion.div>
 
-          {/* TEXT */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -50,7 +47,6 @@ export function About() {
               Away from the screen, I reset by writing and shaping ideas into something meaningful.
             </p>
 
-            {/* CTA */}
             <div className="pt-4 flex justify-center lg:justify-start">
               <Button
                 variant="outline"
