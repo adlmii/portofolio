@@ -3,7 +3,7 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Github, Linkedin } from "lucide-react"; // Update import icon
+import { Github, Linkedin } from "lucide-react";
 import { useRef } from "react";
 
 export function About() {
@@ -12,9 +12,6 @@ export function About() {
       id="about"
       className="relative py-20 sm:py-24 overflow-hidden"
     >
-      {/* ======================================================
-          SMOOTH BACKGROUND
-         ====================================================== */}
       <div className="absolute inset-0 -z-20 w-full h-full bg-linear-to-b from-background via-secondary/15 to-background" />
 
       {/* Subtle Dot Pattern */}
@@ -33,7 +30,6 @@ export function About() {
       <div className="container px-4 md:px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           
-          {/* FOTO / CARD */}
           <motion.div
             initial={{ opacity: 0, x: -20, scale: 0.9 }}
             whileInView={{ opacity: 1, x: 0, scale: 1 }}
@@ -44,7 +40,6 @@ export function About() {
             <TiltedCard />
           </motion.div>
 
-          {/* TEXT CONTENT */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -81,10 +76,8 @@ export function About() {
               </p>
             </div>
 
-            {/* ===== BUTTONS AREA ===== */}
             <div className="pt-4 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
               
-              {/* LinkedIn Button (Primary) */}
               <Button
                 size="lg"
                 className="rounded-full px-8 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all"
@@ -99,8 +92,6 @@ export function About() {
                   Connect on LinkedIn
                 </a>
               </Button>
-
-              {/* GitHub Button (Outline) */}
               <Button
                 variant="outline"
                 size="lg"
@@ -163,7 +154,7 @@ function TiltedCard() {
       >
         <div className="absolute inset-2 sm:inset-3 rounded-xl overflow-hidden bg-background border border-white/5">
             <Image
-                src="/images/profile.jpg" 
+                src="/images/profile.JPG" 
                 alt="Aidil Profile"
                 fill
                 className="object-cover scale-105 hover:scale-110 transition-transform duration-500"

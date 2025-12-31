@@ -30,7 +30,7 @@ export function Footer() {
             <div className="flex items-center gap-4">
               <div className="relative h-12 w-12 md:h-14 md:w-14">
                 <Image
-                  src="/images/logo.png"
+                  src="/icon.png"
                   alt="logo"
                   fill
                   className="rounded-xl object-cover opacity-90 shadow-sm"
