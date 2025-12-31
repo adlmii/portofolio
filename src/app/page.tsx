@@ -12,7 +12,6 @@ export default function Home() {
       <About />
       <TechStack />
       <FeaturedProjects />
-      <CodePhilosophy />
       <Footer />
     </div>
   );

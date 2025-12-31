@@ -1,27 +1,40 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { SiMedium } from "react-icons/si";
+import { Github, Linkedin, Mail, } from "lucide-react";
+import Image from "next/image";
 
 export function Footer() {
   const socialLinks = [
     { icon: Github, href: "https://github.com/adlmii", label: "GitHub" },
     { icon: Linkedin, href: "www.linkedin.com/in/aidil-fahmi", label: "LinkedIn" },
     { icon: Mail, href: "mailto:aidilfahmi601@gmail.com", label: "Email" },
+    { icon: SiMedium, href: "https://medium.com/@adlmii", label: "Medium" },
   ];
 
   return (
-    <footer className="border-t border-border/40 bg-background/50 backdrop-blur-xl">
+    <footer className="border-t border-border/40 bg-secondary/30 dark:bg-card/70 backdrop-blur-xl">
       <div className="container pt-24 pb-16 md:py-16">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-          
-          <div className="flex flex-col items-center md:items-start gap-2">
-            <span className="text-2xl font-bold font-mono tracking-tighter text-foreground">
-              [NA]
-            </span>
-            <p className="text-sm text-muted-foreground text-center md:text-left max-w-75">
-              Crafting digital experiences with a focus on performance and accessibility.
-            </p>
+          <div className="flex flex-col gap-4 max-w-sm">
+            <div className="flex flex-col gap-3">
+              <div className="inline-flex p-2 rounded-lg bg-secondary/40 w-fit">
+                <Image
+                  src="/images/logo.png"
+                  alt="logo"
+                  width={36}
+                  height={36}
+                  className="rounded-md opacity-90"
+                  priority
+                />
+              </div>
+
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Crafting frontend systems with a focus on performance
+                and accessibility.
+              </p>
+            </div>
           </div>
 
           <div className="flex gap-4">

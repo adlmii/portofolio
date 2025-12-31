@@ -6,7 +6,7 @@ import { principles } from "@/lib/data";
 
 export function CodePhilosophy() {
   return (
-    <section id="about" className="relative py-24 overflow-hidden">
+    <section id="about" className="relative py-24 overflow-hidden bg-background">
       
       <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-border to-transparent z-10" />
       
