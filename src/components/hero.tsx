@@ -6,9 +6,9 @@ import {
   Play,
   Pause,
   ArrowRight,
-  Github,
   Volume2,
   VolumeX,
+  Volume1,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Squares } from "@/components/ui/squares";
@@ -35,9 +35,28 @@ export function Hero() {
     setIsPlaying(!isPlaying);
   };
 
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume;
+      if (isMuted && newVolume > 0) {
+        setIsMuted(false);
+        audioRef.current.muted = false;
+      }
+    }
+  };
+
+  const toggleMute = () => {
+    if (!audioRef.current) return;
+    const newMutedState = !isMuted;
+    audioRef.current.muted = newMutedState;
+    setIsMuted(newMutedState);
+  };
+
   return (
     <section id="hero" className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center overflow-hidden bg-background py-16 sm:py-20 lg:py-24">
-      {/* Background */}
       <div className="absolute inset-0 z-0">
         <Squares
           direction="diagonal"
@@ -52,28 +71,27 @@ export function Hero() {
 
       <div className="container relative z-10 px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 items-center">
-          {/* LEFT */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
             className="flex flex-col gap-5 text-center lg:text-left pt-4 sm:pt-0"
           >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-            I build{" "}
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-blue-400">
-              interactive
-            </span>{" "}
-            web experiences that last.
-          </h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
+              I build{" "}
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-blue-400">
+                interactive
+              </span>{" "}
+              web experiences that last.
+            </h1>
 
-          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0">
-            Building fast and thoughtful web experiences with a focus on performance and longevity.
-            <br />
-            <span className="text-foreground font-medium">
-              Press play, set the vibe, and explore my work.
-            </span>
-          </p>
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0">
+              Building fast and thoughtful web experiences with a focus on performance and longevity.
+              <br />
+              <span className="text-foreground font-medium">
+                Press play, set the vibe, and explore my work.
+              </span>
+            </p>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start pt-1">
               <Button
@@ -85,26 +103,9 @@ export function Hero() {
                   View Projects <ArrowRight className="ml-2 w-4 h-4" />
                 </a>
               </Button>
-
-              <Button
-                variant="outline"
-                size="default"
-                className="h-11 sm:h-12 rounded-full px-7 bg-background/50 backdrop-blur border-border"
-                asChild
-              >
-                <a
-                  href="https://github.com/adlmii"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Github className="mr-2 w-4 h-4" />
-                  GitHub Profile
-                </a>
-              </Button>
             </div>
           </motion.div>
 
-          {/* RIGHT */}
           <motion.div
             initial={{ opacity: 0, y: 24, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -123,7 +124,7 @@ export function Hero() {
                     }`}
                   />
                 </div>
-
+                
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-semibold text-lg">Bread</h3>
@@ -132,7 +133,7 @@ export function Hero() {
 
                   <button
                     onClick={togglePlay}
-                    className="w-11 h-11 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-lg"
+                    className="w-11 h-11 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-lg transition-transform active:scale-95"
                   >
                     {isPlaying ? (
                       <Pause className="w-4 h-4 fill-current" />
@@ -149,10 +150,12 @@ export function Hero() {
                     audioRef.current &&
                     setCurrentTime(audioRef.current.currentTime)
                   }
-                  onLoadedMetadata={() =>
-                    audioRef.current &&
-                    setDuration(audioRef.current.duration)
-                  }
+                  onLoadedMetadata={() => {
+                    if (audioRef.current) {
+                      setDuration(audioRef.current.duration);
+                      audioRef.current.volume = volume;
+                    }
+                  }}
                   onEnded={() => {
                     setIsPlaying(false);
                     setCurrentTime(0);
@@ -170,30 +173,38 @@ export function Hero() {
                     audioRef.current.currentTime = Number(e.target.value);
                     setCurrentTime(Number(e.target.value));
                   }}
-                  className="w-full h-1 bg-secondary rounded-lg accent-primary"
+                  className="w-full h-1 bg-secondary rounded-lg accent-primary cursor-pointer"
                 />
 
                 <div className="flex justify-between text-[10px] text-muted-foreground font-mono">
                   <span>{formatTime(currentTime)}</span>
                   <span>{formatTime(duration)}</span>
                 </div>
-
+                
                 <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                  <button
-                    onClick={() => {
-                      if (!audioRef.current) return;
-                      audioRef.current.muted = !isMuted;
-                      setIsMuted(!isMuted);
-                    }}
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    {isMuted ? (
-                      <VolumeX className="w-4 h-4" />
-                    ) : (
-                      <Volume2 className="w-4 h-4" />
-                    )}
-                  </button>
-
+                  <div className="flex items-center gap-2 group">
+                    <button
+                      onClick={toggleMute}
+                      className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {isMuted || volume === 0 ? (
+                        <VolumeX className="w-4 h-4" />
+                      ) : volume < 0.5 ? (
+                        <Volume1 className="w-4 h-4" />
+                      ) : (
+                        <Volume2 className="w-4 h-4" />
+                      )}
+                    </button>
+                    <input
+                      type="range"
+                      min={0}
+                      max={1}
+                      step={0.01}
+                      value={isMuted ? 0 : volume}
+                      onChange={handleVolumeChange}
+                      className="w-16 h-1 bg-secondary rounded-lg accent-primary cursor-pointer opacity-50 group-hover:opacity-100 transition-opacity"
+                    />
+                  </div>
                   <span className="text-[10px] text-muted-foreground">
                     No Copyright Music
                   </span>

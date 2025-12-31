@@ -36,9 +36,25 @@ export function Navbar() {
     el?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const menuVariants = {
+    closed: {
+      opacity: 0,
+      scale: 0.95,
+      y: -20,
+      transition: { duration: 0.2 }
+    },
+    open: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: { duration: 0.2 }
+    }
+  };
+
   return (
     <>
-      <div className="fixed top-4 right-4 z-50 md:hidden">
+      <div className="fixed top-4 right-4 z-50 md:hidden flex gap-2">
+        {/* Tombol Toggle Menu */}
         <Button
           variant="ghost"
           size="icon"
@@ -69,6 +85,57 @@ export function Navbar() {
         </Button>
       </div>
 
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={menuVariants}
+            className="fixed inset-x-4 top-20 z-40 p-4 rounded-2xl bg-card/90 backdrop-blur-xl border border-border shadow-2xl md:hidden flex flex-col gap-4"
+          >
+            <div className="flex flex-col gap-2">
+              {navLinks.map((link) => {
+                 const active = isActive(link.href);
+                 return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleLinkClick(link.href);
+                    }}
+                    className={`
+                      px-4 py-3 rounded-xl text-sm font-medium transition-colors
+                      ${active 
+                        ? "bg-primary/10 text-primary" 
+                        : "hover:bg-muted text-muted-foreground hover:text-foreground"}
+                    `}
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
+            </div>
+
+            <div className="h-px bg-border/50" />
+            <div className="flex items-center justify-between px-4 py-2">
+              <span className="text-sm font-medium text-muted-foreground">Appearance</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="rounded-full h-9 w-9 bg-background border"
+              >
+                {mounted && (
+                  theme === "dark" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.nav
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -94,7 +161,7 @@ export function Navbar() {
                 <span
                   className={`relative z-10 transition-colors ${
                     active
-                      ? "text-foreground font-semibold"
+                      ? "text-background font-semibold"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -128,19 +195,11 @@ export function Navbar() {
                     />
                   )}
                 </AnimatePresence>
-
-                {/* ACTIVE TEXT OVERLAY */}
-                {active && (
-                  <span className="absolute inset-0 flex items-center justify-center z-20 text-background font-semibold text-sm">
-                    {link.name}
-                  </span>
-                )}
               </Link>
             );
           })}
         </div>
       </motion.nav>
-
       <div className="hidden md:block fixed top-4 right-4 z-50">
         <Button
           variant="ghost"

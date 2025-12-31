@@ -15,11 +15,19 @@ export function useScrollSpy(
 
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
-        });
+        // ambil SEMUA section yang lagi kelihatan
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .map((e) => ({
+            id: e.target.id,
+            top: e.boundingClientRect.top,
+          }));
+
+        if (!visible.length) return;
+
+        visible.sort((a, b) => a.top - b.top);
+
+        setActiveId(visible[0].id);
       },
       { rootMargin }
     );
